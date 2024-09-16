@@ -1,0 +1,38 @@
+There are two kinds of object properties.
+The first kind is data properties. We already know how to work with them. All properties that we’ve been 
+using until now were data properties.
+
+The second type of property is an accessor property. They are essentially functions that execute on 
+getting and setting a value, but look like regular properties to an external code.
+
+Accessor properties are represented by “getter” and “setter” methods. In an object literal they are denoted by get and set:
+
+let obj = {
+  get propName() {
+    // getter, the code executed on getting obj.propName
+  },
+
+  set propName(value) {
+    // setter, the code executed on setting obj.propName = value
+  }
+};
+
+An accessor descriptor may have:
+get – a function without arguments, that works when a property is read,
+set – a function with one argument, that is called when the property is set,
+enumerable – same as for data properties,
+configurable – same as for data properties.
+
+
+A property can be either an accessor (has get/set methods) or a data property (has a value), not both.
+If we try to supply both get and value in the same descriptor, there will be an error:
+Object.defineProperty({}, 'prop', {
+  get() {
+    return 1
+  },
+
+  value: 2
+});
+
+Accessors allow to take control over a “regular” data property at any moment
+ by replacing it with a getter and a setter and tweak its behavior.

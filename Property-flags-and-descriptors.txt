@@ -1,0 +1,88 @@
+to get this property flags, 
+the method is Object.getOwnPropertyDescriptor : this allows to get the full information about a property
+
+the syntax is; Let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
+
+obj = the Object to get information from
+propertyName = the name of the property to be queried
+
+the returned value contains all flagas and value of the Object
+
+check the script.js file for example.
+
+To change the flags, we can use Object.defineProperty.
+the syntax: Object.defineProperty(obj, propertyName, descriptor)
+
+obj, propertyName = The object and its property to apply the descriptor.
+descriptor = Property descriptor object to apply.
+
+Let’s make user.name non-writable (can’t be reassigned) by changing writable flag:
+
+let user = {
+  name: "John"
+};
+
+Object.defineProperty(user, "name", {
+  writable: false
+});
+
+user.name = "Pete"; // Error: Cannot assign to read only property 'name'
+
+
+Non-enumerable
+let user = {
+  name: "John",
+  toString() {
+    return this.name;
+  }
+};
+
+Object.defineProperty(user, "toString", {
+  enumerable: false
+});
+
+// Now our toString disappears:
+for (let key in user) alert(key); // name
+
+Non-enumerable properties are also excluded from Object.keys:
+
+alert(Object.keys(user)); // name
+
+by default if we add a toString of our own, then by default it shows up in for..in, like this
+for (let key in user) alert(key); // name, toString
+
+we remove it by including 'enumerable: false' in the code
+Object.defineProperty(user, "toString", {
+  enumerable: false
+});
+
+NON CONFIGURABLE
+The non-configurable flag (configurable:false) is sometimes preset for built-in objects and properties.
+
+A non-configurable property can’t be deleted, its attributes can’t be modified.
+
+eg Math PI, it cannot be overwritten nor can we create our own
+configurable: false prevents changes of property flags and its deletion, while allowing to change its value.
+
+--The only attribute change possible: writable true → false
+There’s a minor exception about changing flags.
+
+We can change writable: true to false for a non-configurable property, thus preventing 
+its value modification (to add another layer of protection). 
+Not the other way around though.--
+
+the method Object.defineProperties(obj, descriptors) allows to define many properties at once.
+the syntax is: 
+Object.defineProperties(obj, {
+  prop1: descriptor1,
+  prop2: descriptor2
+  // ...
+});
+
+To get all property descriptors at once, we can use the method Object.getOwnPropertyDescriptors(obj).
+Together with Object.defineProperties it can be used as a “flags-aware” way of cloning an object:
+
+let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
+
+
+
